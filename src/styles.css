@@ -1,0 +1,2024 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: dark --default, light;
+}
+
+/* ============================================================
+   Droid Cockpit design system
+   Palette: graphite surfaces, emerald primary actions, cyan data,
+   amber attention accents, and semantic red only for errors.
+   Depth follows DaisyUI convention: base-100 (raised cards)
+   -> base-200 (page bg) -> base-300 (recessed) -> base-400 (borders).
+   ============================================================ */
+
+:root {
+  --cockpit-primary: #10b981;
+  --cockpit-primary-strong: #059669;
+  --cockpit-primary-soft: #34d399;
+  --cockpit-accent: #0891b2;
+  --cockpit-accent-soft: #22d3ee;
+  --cockpit-amber: #d97706;
+
+  /* Semantic — used only for state, not decoration */
+  --cockpit-success: #10b981;
+  --cockpit-warning: #f59e0b;
+  --cockpit-error: #ef4444;
+  --cockpit-info: #0ea5e9;
+
+  /* Card elevation */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 12px 24px rgba(15, 23, 42, 0.12);
+  --shadow-lg: 0 20px 40px rgba(15, 23, 42, 0.18);
+  --shadow-xl: 0 28px 54px rgba(15, 23, 42, 0.22);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 8px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================
+   Dark theme (default) — proper depth scale
+   base-100 lightest (cards float forward) → base-400 (borders)
+   ============================================================ */
+
+:root[data-theme="dark"], :root {
+  /* Depth scale: lightest → darkest. Cards use base-100 so they "raise". */
+  --color-base-100: #191b1d;   /* raised card surface */
+  --color-base-200: #101214;   /* page background / recessed */
+  --color-base-300: #0a0b0d;   /* deeply recessed controls (inputs, toggles) */
+  --color-base-400: #32363a;   /* strong borders / dividers */
+
+  --color-base-content: #cdd8ea;
+  --color-base-content-strong: #f1f5f9;
+
+  --color-primary: #10b981;
+  --color-primary-content: #ffffff;
+  --color-secondary: #0891b2;
+  --color-accent: #d97706;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #0891b2;
+  --color-neutral: #9ca3af;
+
+  --color-border: rgb(222 226 230 / 0.12);
+  --color-border-strong: rgb(222 226 230 / 0.24);
+  --color-surface-hover: rgb(16 185 129 / 0.10);
+  --color-surface-active: rgb(16 185 129 / 0.16);
+
+  --gradient-brand: linear-gradient(135deg, #059669 0%, #0891b2 58%, #d97706 100%);
+  --gradient-brand-soft: linear-gradient(135deg, rgb(16 185 129 / 0.14), rgb(8 145 178 / 0.10), rgb(217 119 6 / 0.10));
+}
+
+/* ============================================================
+   Light theme — floating gradient + glass cards
+   ============================================================ */
+
+:root[data-theme="light"] {
+  /* Depth scale: white (raised cards) → light gray (recessed) */
+  --color-base-100: #ffffff;   /* solid surfaces: dialogs / dropdowns */
+  --color-base-200: #f5f7f8;   /* page background */
+  --color-base-300: #eceff2;   /* recessed controls / inputs */
+  --color-base-400: #dce2e7;   /* strong borders */
+
+  /* Glass card surface — semi-transparent so the body gradient shows through */
+  --color-glass-card: rgba(255, 255, 255, 0.75);
+
+  --color-base-content: #475569;
+  --color-base-content-strong: #0f172a;
+  --color-primary: #059669;
+  --color-primary-soft: #047857;
+  --color-primary-content: #ffffff;
+  --color-secondary: #0891b2;
+  --color-accent: #d97706;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #0891b2;
+  --color-neutral: #94a3b8;
+
+  --color-border: rgba(15, 23, 42, 0.12);
+  --color-border-strong: rgba(15, 23, 42, 0.18);
+  --color-surface-hover: rgba(15, 23, 42, 0.06);
+  --color-surface-active: rgba(5, 150, 105, 0.10);
+
+  --gradient-brand: linear-gradient(135deg, #059669 0%, #0891b2 58%, #d97706 100%);
+  --gradient-brand-soft: linear-gradient(135deg, rgba(5, 150, 105, 0.10), rgba(8, 145, 178, 0.08), rgba(217, 119, 6, 0.08));
+
+  /* Soft, airy shadows for the floating look */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 12px 24px rgba(15, 23, 42, 0.12);
+  --shadow-lg: 0 20px 40px rgba(15, 23, 42, 0.18);
+  --shadow-xl: 0 28px 54px rgba(15, 23, 42, 0.22);
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-base-200);
+  color: var(--color-base-content);
+}
+
+/* ============================================================
+   App shell image surface
+   ============================================================ */
+
+.app-shell-surface {
+  position: relative;
+  overflow: hidden;
+}
+
+.app-shell-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(180deg, rgb(16 18 20 / 0.96), rgb(16 18 20 / 0.90)),
+    var(--cockpit-surface-image);
+  background-size: cover;
+  background-position: center right;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+:root[data-theme="light"] .app-shell-surface::before {
+  background-image:
+    linear-gradient(180deg, rgb(245 247 248 / 0.94), rgb(236 239 242 / 0.88)),
+    var(--cockpit-surface-image);
+  opacity: 0.36;
+}
+
+.app-shell-surface > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   Light theme background
+   ============================================================ */
+
+:root[data-theme="light"] body {
+  background: linear-gradient(180deg, #f7f8fa 0%, #eceff2 100%);
+  color-scheme: light;
+}
+
+/* Dark theme keeps a clean solid base */
+:root[data-theme="dark"] body,
+:root body {
+  color-scheme: dark;
+}
+
+/* ============================================================
+   Scrollbars
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(120 140 175 / 0.22);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(120 140 175 / 0.40);
+  background-clip: content-box;
+}
+
+/* ============================================================
+   Cockpit card system
+   ============================================================ */
+
+.cockpit-card {
+  background: var(--color-base-100);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.25s var(--ease-out), transform 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Light theme: glass card — semi-transparent + blur so the floating gradient
+   shows through softly. Dark theme keeps solid surface for contrast. */
+:root[data-theme="light"] .cockpit-card {
+  background: var(--color-glass-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.cockpit-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+  border-color: var(--color-border-strong);
+}
+
+.cockpit-card-elevated {
+  box-shadow: var(--shadow-md);
+  border-color: rgb(16 185 129 / 0.40);
+}
+
+.cockpit-card-elevated:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.cockpit-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.125rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cockpit-card-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  color: var(--color-base-content-strong);
+}
+
+.cockpit-card-footer {
+  padding: 0.625rem 1.125rem;
+  border-top: 1px solid var(--color-border);
+  background: rgb(16 185 129 / 0.04);
+}
+
+/* ============================================================
+   Stat card
+   The accent strip uses --stat-accent. Defaults to primary blue.
+   ============================================================ */
+
+.stat-card {
+  background: var(--color-base-100);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.125rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.25s var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+:root[data-theme="light"] .stat-card {
+  background: var(--color-glass-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--stat-accent, var(--color-primary));
+  opacity: 0.9;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--color-border-strong);
+}
+
+.stat-icon-bg {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.section-icon {
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
+.section-icon-stat {
+  width: 38px;
+  height: 38px;
+  filter: drop-shadow(0 6px 10px rgb(15 23 42 / 0.14));
+}
+
+.section-icon-tile {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-icon-quick {
+  width: 48px;
+  height: 48px;
+  filter: drop-shadow(0 8px 14px rgb(15 23 42 / 0.16));
+}
+
+/* Decorative icon tints use the app's multi-accent palette. */
+.stat-icon-primary   { background: rgb(16 185 129 / 0.16);  color: #34d399; }
+.stat-icon-accent    { background: rgb(8 145 178 / 0.16);   color: #22d3ee; }
+.stat-icon-info      { background: rgb(217 119 6 / 0.16);   color: #fbbf24; }
+.stat-icon-soft      { background: rgb(156 163 175 / 0.14); color: #d1d5db; }
+.stat-icon-success   { background: rgb(16 185 129 / 0.16);  color: #34d399; }
+.stat-icon-warning   { background: rgb(245 158 11 / 0.16);  color: #fbbf24; }
+
+.stat-value {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-top: 0.5rem;
+  color: var(--color-base-content-strong);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--color-neutral);
+  font-weight: 500;
+}
+
+.stat-sub {
+  font-size: 0.72rem;
+  color: var(--color-neutral);
+  opacity: 0.8;
+  margin-top: 0.3rem;
+}
+
+/* ============================================================
+   Badges
+   ============================================================ */
+
+.cockpit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.cockpit-badge-primary { background: rgb(16 185 129 / 0.14); color: #34d399; border-color: rgb(16 185 129 / 0.25); }
+.cockpit-badge-accent  { background: rgb(217 119 6 / 0.14);  color: #fbbf24; border-color: rgb(217 119 6 / 0.25); }
+.cockpit-badge-ghost   { background: rgb(120 140 175 / 0.12); color: var(--color-neutral); border-color: rgb(120 140 175 / 0.18); }
+.cockpit-badge-success { background: rgb(16 185 129 / 0.14); color: #34d399; border-color: rgb(16 185 129 / 0.25); }
+.cockpit-badge-warning { background: rgb(245 158 11 / 0.14); color: #fbbf24; border-color: rgb(245 158 11 / 0.25); }
+.cockpit-badge-info    { background: rgb(14 165 233 / 0.14); color: #38bdf8; border-color: rgb(14 165 233 / 0.25); }
+.cockpit-badge-error   { background: rgb(239 68 68 / 0.14);  color: #f87171; border-color: rgb(239 68 68 / 0.25); }
+
+:root[data-theme="light"] .cockpit-badge-primary { color: #047857; border-color: rgba(5, 150, 105, 0.30); }
+:root[data-theme="light"] .cockpit-badge-accent  { color: #b45309; border-color: rgba(217, 119, 6, 0.32); }
+:root[data-theme="light"] .cockpit-badge-success { color: #15803d; border-color: rgba(34, 197, 94, 0.32); }
+:root[data-theme="light"] .cockpit-badge-warning { color: #b45309; border-color: rgba(245, 158, 11, 0.32); }
+:root[data-theme="light"] .cockpit-badge-info    { color: #0369a1; border-color: rgba(14, 165, 233, 0.30); }
+:root[data-theme="light"] .cockpit-badge-error   { color: #b91c1c; border-color: rgba(239, 68, 68, 0.30); }
+
+/* ============================================================
+   Settings
+   ============================================================ */
+
+.settings-group {
+  background: var(--color-base-100);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.125rem;
+  transition: background 0.2s var(--ease-out);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.settings-row:last-child { border-bottom: none; }
+.settings-row:hover { background: var(--color-surface-hover); }
+
+.settings-row-title { font-size: 0.875rem; font-weight: 500; color: var(--color-base-content); }
+.settings-row-desc  { font-size: 0.75rem; color: var(--color-neutral); margin-top: 0.15rem; }
+
+.settings-section-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-neutral);
+  padding: 0 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================================
+   Navigation
+   ============================================================ */
+
+/* ============================================================
+   Floating capsule sidebar
+   A floating, rounded, glass-blur vertical capsule on the left.
+   Icon-only by default with hover tooltips; expands to show labels.
+   ============================================================ */
+
+.side-nav-floating {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64px;
+  height: auto;
+  min-height: 420px;
+  max-height: calc(100vh - 80px);
+  background: var(--color-glass-card, var(--color-base-100));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  gap: 10px;
+  z-index: 1000;
+  animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+:root[data-theme="dark"] .side-nav-floating {
+  background: var(--color-base-100);
+}
+
+.side-nav-floating.side-nav-expanded {
+  width: 200px;
+  left: 20px;
+  align-items: stretch;
+  padding: 16px 12px;
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateY(-50%) translateX(-20px); }
+  to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+/* Brand */
+.side-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.side-nav-expanded .side-nav-brand {
+  padding: 0 8px;
+}
+
+.side-nav-brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #0a0b0d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgb(0 0 0 / 0.26), 0 0 0 1px rgb(255 255 255 / 0.10);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s var(--ease-spring);
+  overflow: hidden;
+}
+
+.side-nav-brand-logo:hover {
+  transform: translateY(-1px) scale(1.04);
+}
+
+.side-nav-brand-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.side-nav-brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.side-nav-brand-name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-base-content-strong);
+  white-space: nowrap;
+}
+
+.side-nav-brand-version {
+  font-size: 10px;
+  color: var(--color-neutral);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Divider */
+.side-nav-divider {
+  width: 32px;
+  height: 1px;
+  background: var(--color-border);
+  flex-shrink: 0;
+  margin: 2px 0;
+}
+
+.side-nav-expanded .side-nav-divider {
+  width: 100%;
+}
+
+/* Items container */
+.side-nav-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 0 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  align-items: center;
+}
+
+.side-nav-expanded .side-nav-items {
+  align-items: stretch;
+}
+
+.side-nav-items::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Nav item */
+.side-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 14px;
+  color: var(--color-neutral);
+  transition: all 0.2s var(--ease-out);
+  cursor: pointer;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  width: 44px;
+  height: 44px;
+  justify-content: center;
+}
+
+.side-nav-expanded .side-nav-item {
+  width: 100%;
+  height: 42px;
+  justify-content: flex-start;
+  padding: 10px 12px;
+}
+
+.side-nav-item:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-base-content);
+}
+
+.side-nav-item.active {
+  background: var(--color-surface-active);
+  color: var(--color-primary-soft, #34d399);
+}
+
+.side-nav-item.active::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: var(--gradient-brand);
+  border-radius: 0 3px 3px 0;
+}
+
+.side-nav-expanded .side-nav-item.active::after {
+  left: 0;
+}
+
+.side-nav-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.side-nav-section-icon {
+  width: 32px;
+  height: 32px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 10px rgb(15 23 42 / 0.16));
+  transform: translateZ(0);
+}
+
+.side-nav-expanded .side-nav-section-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.side-nav-item-label {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.side-nav-expanded .side-nav-item.active .side-nav-item-label {
+  font-weight: 600;
+}
+
+/* Tooltip (icon-only mode) */
+.side-nav-tooltip {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 12px;
+  background: var(--color-base-400, #1e293b);
+  color: var(--color-base-content-strong, #f1f5f9);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease-out);
+  z-index: 1100;
+  box-shadow: var(--shadow-md);
+}
+
+.side-nav-item:hover .side-nav-tooltip {
+  opacity: 1;
+}
+
+/* Bottom section */
+.side-nav-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.side-nav-expanded .side-nav-bottom {
+  align-items: stretch;
+}
+
+/* Update indicator */
+.side-nav-update-indicator {
+  position: relative;
+}
+
+.side-nav-update-text {
+  color: var(--color-accent, #d97706);
+  font-weight: 600;
+}
+
+.side-nav-update-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent, #d97706);
+  box-shadow: 0 0 0 3px var(--color-base-100);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.side-nav-expanded .side-nav-update-dot {
+  right: 12px;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(1.3); }
+}
+
+/* Toggle button */
+.side-nav-toggle {
+  color: var(--color-neutral);
+}
+
+/* Cockpit toggle switch (used in settings) */
+.cockpit-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.cockpit-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.cockpit-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: var(--color-base-300);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  transition: 0.3s var(--ease-out);
+}
+
+.cockpit-toggle-slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-neutral);
+  border-radius: 50%;
+  transition: 0.3s var(--ease-out);
+}
+
+.cockpit-toggle input:checked + .cockpit-toggle-slider {
+  background: var(--gradient-brand);
+  border-color: transparent;
+}
+
+.cockpit-toggle input:checked + .cockpit-toggle-slider::before {
+  transform: translateY(-50%) translateX(20px);
+  background: white;
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Main content offset to accommodate floating sidebar */
+.app-main-offset {
+  margin-left: 100px;
+}
+
+.side-nav-expanded ~ .app-main-offset {
+  margin-left: 230px;
+}
+
+/* ============================================================
+   Legacy nav-item (used in settings tabs)
+   ============================================================ */
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-neutral);
+  border-radius: var(--radius-md);
+  margin: 0.15rem 0.625rem;
+  transition: all 0.2s var(--ease-out);
+  position: relative;
+  cursor: pointer;
+  width: calc(100% - 1.25rem);
+  min-height: 40px;
+}
+
+.nav-item:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-base-content);
+}
+
+.nav-item.active {
+  background: var(--color-surface-active);
+  color: var(--color-primary-soft, #34d399);
+  font-weight: 600;
+}
+
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 65%;
+  background: var(--gradient-brand);
+  border-radius: 0 3px 3px 0;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-base-100);
+  border-bottom: 1px solid var(--color-border);
+  min-height: 56px;
+}
+
+:root[data-theme="light"] .app-header {
+  background: var(--color-glass-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+:root[data-theme="light"] .app-sidebar {
+  background: var(--color-glass-card) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+}
+
+.app-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-base-content-strong);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+
+.btn-cockpit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition: all 0.18s var(--ease-out);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-cockpit-primary {
+  background: var(--gradient-brand);
+  color: white;
+  box-shadow: 0 2px 6px rgb(5 150 105 / 0.32), 0 1px 2px rgb(217 119 6 / 0.18);
+}
+
+.btn-cockpit-primary:hover {
+  box-shadow: 0 6px 16px rgb(5 150 105 / 0.38);
+  transform: translateY(-1px);
+}
+
+.btn-cockpit-ghost {
+  background: transparent;
+  color: var(--color-neutral);
+}
+.btn-cockpit-ghost:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-base-content);
+}
+
+.btn-cockpit-outline {
+  background: var(--color-base-100);
+  border-color: var(--color-border-strong);
+  color: var(--color-base-content);
+}
+.btn-cockpit-outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary-soft, #34d399);
+  background: var(--color-surface-hover);
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--color-neutral);
+  transition: all 0.18s var(--ease-out);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-icon:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-primary-soft, #34d399);
+}
+
+.btn-icon-danger:hover {
+  background: rgb(239 68 68 / 0.12);
+  color: #f87171;
+}
+
+/* ============================================================
+   Toggle
+   ============================================================ */
+
+.toggle-cockpit {
+  width: 38px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-base-400);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s var(--ease-out);
+  border: none;
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+}
+
+.toggle-cockpit::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  transition: transform 0.25s var(--ease-spring);
+}
+
+.toggle-cockpit:checked {
+  background: var(--gradient-brand);
+}
+
+.toggle-cockpit:checked::after {
+  transform: translateX(16px);
+}
+
+/* ============================================================
+   Input
+   ============================================================ */
+
+.input-cockpit {
+  background: var(--color-base-300);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.55rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--color-base-content);
+  transition: all 0.18s var(--ease-out);
+  outline: none;
+  width: 100%;
+}
+
+.input-cockpit:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgb(16 185 129 / 0.18);
+  background: var(--color-base-100);
+}
+
+.input-cockpit::placeholder { color: var(--color-neutral); opacity: 0.7; }
+
+textarea.input-cockpit {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.model-select-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+select.input-cockpit {
+  cursor: pointer;
+  appearance: auto;
+  -webkit-appearance: auto;
+  background-image: none;
+  padding-right: 0.8rem;
+}
+
+.required-mark {
+  margin-left: 0.2rem;
+  color: var(--color-error);
+  font-weight: 800;
+}
+
+.optional-mark {
+  margin-left: 0.2rem;
+  color: var(--color-neutral);
+  font-weight: 500;
+}
+
+.preset-reference-card {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-base-300);
+}
+
+:root[data-theme="light"] .preset-reference-card {
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.preset-reference-title {
+  color: var(--color-base-content-strong);
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.preset-reference-grid {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: 0.35rem 0.6rem;
+  font-size: 0.74rem;
+}
+
+.preset-reference-grid span {
+  color: var(--color-neutral);
+}
+
+.preset-reference-grid strong,
+.preset-reference-grid code,
+.preset-reference-grid p {
+  min-width: 0;
+  color: var(--color-base-content);
+  overflow-wrap: anywhere;
+}
+
+.preset-reference-grid code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.7rem;
+}
+
+.preset-reference-note {
+  margin-top: 0.45rem;
+  color: var(--color-neutral);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.preset-reference-link {
+  display: inline-flex;
+  margin-top: 0.5rem;
+  color: var(--color-primary-soft, var(--color-primary));
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.preset-reference-link:hover {
+  text-decoration: underline;
+}
+
+.protocol-support-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+
+.protocol-support-summary {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-base-300);
+  color: var(--color-neutral);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+:root[data-theme="light"] .protocol-support-summary {
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.protocol-support-summary b {
+  color: var(--color-base-content-strong);
+  margin: 0 0.15rem;
+}
+
+.protocol-support-summary code {
+  color: var(--color-base-content);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.7rem;
+  overflow-wrap: anywhere;
+}
+
+/* ============================================================
+   Alert
+   ============================================================ */
+
+.alert-cockpit {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  border: 1px solid;
+}
+
+.alert-cockpit-info    { background: rgb(14 165 233 / 0.08);  border-color: rgb(14 165 233 / 0.25);  color: #7dd3fc; }
+.alert-cockpit-success { background: rgb(16 185 129 / 0.08);  border-color: rgb(16 185 129 / 0.25);  color: #6ee7b7; }
+.alert-cockpit-warning { background: rgb(245 158 11 / 0.10);  border-color: rgb(245 158 11 / 0.30);  color: #fcd34d; }
+.alert-cockpit-error   { background: rgb(239 68 68 / 0.08);   border-color: rgb(239 68 68 / 0.25);   color: #fca5a5; }
+
+:root[data-theme="light"] .alert-cockpit-info    { color: #0369a1; }
+:root[data-theme="light"] .alert-cockpit-success { color: #047857; }
+:root[data-theme="light"] .alert-cockpit-warning { color: #92400e; }
+:root[data-theme="light"] .alert-cockpit-error   { color: #b91c1c; }
+
+/* ============================================================
+   Empty state
+   ============================================================ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.empty-state-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: rgb(16 185 129 / 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  color: rgb(52 211 153 / 0.58);
+}
+
+.empty-state-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-base-content);
+  margin-bottom: 0.375rem;
+}
+
+.empty-state-desc {
+  font-size: 0.85rem;
+  color: var(--color-neutral);
+  max-width: 28rem;
+}
+
+/* ============================================================
+   Loading
+   ============================================================ */
+
+.loading-cockpit {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgb(16 185 129 / 0.18);
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: cockpit-spin 0.8s linear infinite;
+}
+
+@keyframes cockpit-spin { to { transform: rotate(360deg); } }
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes cockpit-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cockpit-fade-in { animation: cockpit-fade-in 0.3s var(--ease-out); }
+
+@keyframes cockpit-slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cockpit-slide-up { animation: cockpit-slide-up 0.35s var(--ease-out); }
+
+/* ============================================================
+   Modal
+   ============================================================ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(2 6 23 / 0.70);
+  backdrop-filter: blur(6px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: cockpit-fade-in 0.2s var(--ease-out);
+}
+
+.modal-panel {
+  background: var(--color-base-100);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: cockpit-slide-up 0.3s var(--ease-out);
+}
+
+/* ============================================================
+   Provider color coding (semantic, kept restrained)
+   ============================================================ */
+
+.provider-anthropic { background: rgb(217 119 87 / 0.16);  color: #fdba74; }
+.provider-openai    { background: rgb(16 185 129 / 0.16);  color: #6ee7b7; }
+.provider-generic   { background: rgb(8 145 178 / 0.16);   color: #67e8f9; }
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+
+.text-muted  { color: var(--color-neutral); }
+.text-faint  { color: var(--color-neutral); opacity: 0.7; }
+.text-strong { color: var(--color-base-content-strong); }
+
+.font-mono-sm {
+  font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-size: 0.75rem;
+}
+
+.truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+button, .nav-item { user-select: none; }
+
+/* View toggle segmented control */
+.view-toggle {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--color-base-300);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.view-toggle-btn {
+  padding: 0.3rem 0.625rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-neutral);
+  transition: all 0.18s var(--ease-out);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.view-toggle-btn:hover { color: var(--color-base-content); }
+
+.view-toggle-btn.active {
+  background: var(--color-base-100);
+  color: var(--color-primary-soft, #34d399);
+  box-shadow: var(--shadow-xs);
+}
+
+/* Segmented filter (reusable) */
+.segmented-filter {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-md);
+  background: var(--color-base-300);
+  border: 1px solid var(--color-border);
+}
+
+.segmented-filter-btn {
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-neutral);
+  transition: all 0.18s var(--ease-out);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  white-space: nowrap;
+}
+
+.segmented-filter-btn:hover { color: var(--color-base-content); }
+
+.segmented-filter-btn.active {
+  background: var(--color-base-100);
+  color: var(--color-primary-soft, #34d399);
+  box-shadow: var(--shadow-xs);
+}
+
+/* List view for models */
+.model-list-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1fr 0.8fr 0.8fr auto;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.18s var(--ease-out);
+}
+
+.model-list-row:hover { background: var(--color-surface-hover); }
+.model-list-row:last-child { border-bottom: none; }
+
+.model-list-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1fr 0.8fr 0.8fr auto;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-neutral);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-base-200);
+}
+
+/* Compact card (smaller) */
+.cockpit-card-compact {
+  background: var(--color-base-100);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.625rem 0.875rem;
+  transition: all 0.2s var(--ease-out);
+}
+
+.cockpit-card-compact:hover {
+  border-color: var(--color-border-strong);
+  background: var(--color-base-300);
+}
+
+/* Page container — consistent padding + max width for all pages */
+.page-container {
+  padding: 1.5rem;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.page-inner {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   Brand gradient text — Cockpit signature title treatment
+   ============================================================ */
+
+.text-gradient-brand {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Glass sidebar — light theme only. Dark keeps solid for contrast. */
+:root[data-theme="light"] .app-sidebar {
+  background: var(--color-glass-card) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Glass settings-group — light theme */
+:root[data-theme="light"] .settings-group {
+  background: var(--color-glass-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Form field — consistent label + control layout */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-field-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-base-content);
+}
+
+.form-field-hint {
+  font-size: 0.72rem;
+  color: var(--color-neutral);
+}
+
+/* ============================================================
+   Slash command bar
+   ============================================================ */
+
+.slash-command-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 5000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 15vh;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slash-command-modal {
+  width: 560px;
+  max-width: calc(100vw - 40px);
+  background: var(--color-base-100);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  animation: slideUp 0.2s var(--ease-out);
+}
+
+.slash-command-modal-wide {
+  width: min(900px, calc(100vw - 40px));
+  max-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slash-command-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.slash-command-modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-base-content-strong);
+}
+
+.slash-command-modal-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0;
+}
+
+.slash-command-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.slash-command-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: var(--color-base-content-strong);
+  font-family: inherit;
+}
+
+.slash-command-input::placeholder {
+  color: var(--color-neutral);
+}
+
+.slash-command-kbd {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--color-base-300);
+  color: var(--color-neutral);
+  border: 1px solid var(--color-border);
+}
+
+.slash-command-list {
+  padding: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.slash-command-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+}
+
+.slash-command-item.active,
+.slash-command-item:hover {
+  background: var(--color-surface-hover);
+}
+
+.slash-command-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-neutral);
+  flex-shrink: 0;
+}
+
+.slash-command-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.slash-command-item-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-base-content-strong);
+}
+
+.slash-command-item-desc {
+  font-size: 12px;
+  color: var(--color-neutral);
+  margin-top: 1px;
+}
+
+.slash-command-empty {
+  padding: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-neutral);
+}
+
+.slash-command-ref-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  background: var(--color-base-300);
+  color: var(--color-neutral);
+  vertical-align: middle;
+}
+
+.slash-command-cat-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.slash-command-more {
+  padding: 10px 16px;
+  font-size: 12px;
+  color: var(--color-neutral);
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ============================================================
+   Stats command (FACTORY WRAPPED style)
+   ============================================================ */
+
+.stats-command-container {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono, "JetBrains Mono", "SFMono-Regular", monospace);
+}
+
+.stats-command-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.stats-command-header-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-base-content-strong);
+}
+
+.stats-command-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+}
+
+.stats-command-loading,
+.stats-command-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 24px;
+}
+
+.stats-command-loading-text {
+  font-size: 14px;
+  color: var(--color-neutral);
+}
+
+.stats-command-empty-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-base-content);
+}
+
+.stats-command-empty-hint {
+  font-size: 13px;
+  color: var(--color-neutral);
+}
+
+.stats-section {
+  margin-bottom: 28px;
+}
+
+.stats-section:last-child {
+  margin-bottom: 0;
+}
+
+.stats-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-base-content-strong);
+  margin-bottom: 10px;
+}
+
+.stats-section-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin-bottom: 14px;
+}
+
+.stats-section-content {
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* Bar list */
+.stats-bar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stats-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.stats-bar-rank {
+  color: var(--color-neutral);
+  min-width: 20px;
+  text-align: right;
+}
+
+.stats-bar-label {
+  color: var(--color-base-content);
+  min-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stats-bar-track {
+  flex: 1;
+  height: 16px;
+  background: var(--color-base-300);
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.stats-bar-fill {
+  height: 100%;
+  background: var(--gradient-brand);
+  border-radius: 4px;
+  transition: width 0.3s var(--ease-out);
+}
+
+.stats-bar-fill-accent {
+  background: linear-gradient(135deg, #0891b2, #d97706);
+}
+
+.stats-bar-value {
+  color: var(--color-neutral);
+  min-width: 80px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Key-value grid */
+.stats-keyvalue-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 24px;
+}
+
+.stats-keyvalue-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.stats-keyvalue-label {
+  color: var(--color-neutral);
+  font-size: 12px;
+}
+
+.stats-keyvalue-value {
+  color: var(--color-base-content-strong);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Config section */
+.stats-config-summary {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: var(--color-base-content);
+}
+
+.stats-config-sep {
+  margin: 0 8px;
+  color: var(--color-neutral);
+}
+
+.stats-config-subsection {
+  margin-top: 8px;
+}
+
+.stats-config-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-base-content);
+  margin-bottom: 4px;
+}
+
+.stats-config-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stats-config-tag {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--color-base-300);
+  color: var(--color-base-content);
+}
+
+.stats-config-tag em {
+  color: var(--color-neutral);
+  font-style: normal;
+}
+
+.stats-config-sound {
+  font-size: 12px;
+  color: var(--color-base-content);
+}
+
+/* Badges */
+.stats-badge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stats-badge-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-base-content);
+}
+
+.stats-badge-star {
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.stats-badge-label {
+  font-weight: 600;
+}
+
+.stats-badge-desc {
+  color: var(--color-neutral);
+  font-size: 12px;
+}
+
+/* Data range */
+.stats-data-range {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+  font-size: 11px;
+  color: var(--color-neutral);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stats-cached-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--color-base-300);
+  font-size: 10px;
+  color: var(--color-neutral);
+}
+
+/* Monthly breakdown */
+.stats-monthly-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+}
+
+.stats-monthly-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stats-monthly-label {
+  min-width: 40px;
+  color: var(--color-base-content);
+}
+
+.stats-monthly-bar {
+  flex: 1;
+  color: var(--color-primary-soft, #34d399);
+  letter-spacing: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.stats-monthly-value {
+  min-width: 80px;
+  text-align: right;
+  color: var(--color-neutral);
+}
+
+.stats-monthly-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--color-neutral);
+  justify-content: center;
+}
+
+.stats-monthly-legend-bar {
+  color: var(--color-primary-soft, #34d399);
+  letter-spacing: -1px;
+}
+
+.stats-monthly-summary {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.stats-monthly-summary-item {
+  text-align: center;
+}
+
+.stats-monthly-summary-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-base-content-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-monthly-summary-label {
+  font-size: 11px;
+  color: var(--color-neutral);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   Cockpit badge variants
+   ============================================================ */
+
+.cockpit-badge-accent {
+  background: rgb(217 119 6 / 0.15);
+  color: #fbbf24;
+  border: 1px solid rgb(217 119 6 / 0.30);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+
+.cockpit-badge-accent:hover {
+  background: rgb(217 119 6 / 0.25);
+  box-shadow: 0 0 0 2px rgb(217 119 6 / 0.15);
+}
+
+:root[data-theme="light"] .cockpit-badge-accent {
+  color: #b45309;
+}

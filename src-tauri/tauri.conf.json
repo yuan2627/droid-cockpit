@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Droid Cockpit",
+  "version": "1.0.0",
+  "identifier": "io.github.yuan2627.droid-cockpit",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Droid Cockpit",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 900,
+        "minHeight": 600,
+        "decorations": true,
+        "resizable": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self' customprotocol: asset:; base-uri 'none'; connect-src ipc: http://ipc.localhost https://ipc.localhost https://registry.npmjs.org; font-src 'self' data:; form-action 'none'; frame-src 'none'; img-src 'self' asset: http://asset.localhost data:; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'",
+      "devCsp": "default-src 'self' customprotocol: asset:; base-uri 'none'; connect-src ipc: http://ipc.localhost https://ipc.localhost http://localhost:1420 ws://localhost:1420 https://registry.npmjs.org; font-src 'self' data:; form-action 'none'; frame-src 'none'; img-src 'self' asset: http://asset.localhost data:; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "publisher": "yuan2627",
+    "copyright": "Copyright (c) 2026 yuan2627",
+    "shortDescription": "Factory Droid CLI 的 Windows 桌面管理工具",
+    "longDescription": "用于在本机查看和管理 Factory Droid CLI 配置、模型、MCP、技能、Droid、会话与用量。",
+    "icon": ["icons/icon.ico"],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      },
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": ["SimpChinese", "English"]
+      }
+    }
+  }
+}
